@@ -21,6 +21,12 @@ export async function main(ns) {
                 target = "phantasy";
             }
         }
+        if (ns.getServerNumPortsRequired(target) <= numCracksAvailable) {
+            for (const crack of cracks) {
+                crack(target);
+            }
+        }
+        ns.nuke(target);
         if (port.peek() !== target) {
             port.clear();
             port.write(target);
@@ -29,10 +35,8 @@ export async function main(ns) {
             if (ns.getServerNumPortsRequired(server) <= numCracksAvailable) {
                 for (const crack of cracks) {
                     crack(server);
-                    crack(target);
                 }
                 ns.nuke(server);
-                ns.nuke(target);
                 await ns.sleep(100);
                 ns.scp(files, server, "home");
                 ns.exec("autohack.js", server, 5);
@@ -40,9 +44,10 @@ export async function main(ns) {
             }
         }
     }
-    ns.exec("autohack.js", "home", 5);
+    ns.exec("autohack.js", "home", 10);
     await ns.sleep(100);
-    ns.exec("weaken.js", "home", 5);
+    ns.exec("weaken.js", "home", 10);
+    ns.exec("grow.js", "home", 50);
 }
 export function serverList(ns) {
     let servers = ["home"];
