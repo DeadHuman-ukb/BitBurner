@@ -15,6 +15,7 @@ export async function main(ns) {
                     crack(server);
                 }
                 ns.nuke(server);
+                await ns.sleep(100);
                 if (ns.getHackingLevel() <= 10) {
                     target = "n00dles";
                 }
@@ -34,7 +35,7 @@ export async function main(ns) {
                     port.clear();
                     port.write(target);
                 }
-                await ns.sleep(100)
+                await ns.sleep(100);
                 ns.scp(files, server, "home");
                 ns.exec("autohack.js", server, 5, target);
                 ns.exec("weaken.js", server, 5, target);
