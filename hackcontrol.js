@@ -17,8 +17,8 @@ export async function main(ns) {
                 target = "joesguns";
             }
         }
-        if (ns.getHackingLevel() >= 250 && ns.getServerNumPortsRequired("phantasy") <= numCracksAvailable) {
-            if (target != "phantasy") {
+        if (ns.getHackingLevel() >= 250) {
+            if (target != "phantasy" && ns.getServerNumPortsRequired("phantasy") <= numCracksAvailable) {
                 ns.killall(server);
                 target = "phantasy";
             }
