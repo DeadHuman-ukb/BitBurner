@@ -6,46 +6,45 @@ export async function main(ns) {
     let numCracksAvailable = cracks.length;
     let files = ["weaken.js", "autohack.js", "grow.js"];
     var target;
-	ns.disableLog("getServerNumPortsRequired");
+    ns.disableLog("getServerNumPortsRequired");
     for (const server of servers) {
-        let portRequirement = ns.getServerNumPortsRequired(server);
+        if (ns.getHackingLevel() <= 10) {
+            target = "n00dles";
+        }
+        if (ns.getHackingLevel() >= 10 && ns.getHackingLevel() <= 250) {
+            if (target != "joesguns" && ns.getServerNumPortsRequired("joesguns") <= numCracksAvailable) {
+                ns.killall(server);
+                target = "joesguns";
+            }
+        }
+        if (ns.getHackingLevel() >= 250 && ns.getServerNumPortsRequired("phantasy") <= numCracksAvailable) {
+            if (target != "phantasy") {
+                ns.killall(server);
+                target = "phantasy";
+            }
+        }
+        if (port.peek() !== target) {
+            port.clear();
+            port.write(target);
+        }
         if (!ns.getPurchasedServers().includes(server)) {
-            if (portRequirement <= numCracksAvailable) {
+            if (ns.getServerNumPortsRequired(server) <= numCracksAvailable) {
                 for (const crack of cracks) {
                     crack(server);
+                    crack(target);
                 }
                 ns.nuke(server);
-                await ns.sleep(100);
-                if (ns.getHackingLevel() <= 10) {
-                    target = "n00dles";
-                }
-                if (ns.getHackingLevel() >= 10 && ns.getHackingLevel() <= 250) {
-                    if (target != "joesguns") {
-                        ns.killall(server);
-                        target = "joesguns";
-                    }
-                }
-                if (ns.getHackingLevel() >= 250) {
-                    if (target != "phantasy") {
-                        ns.killall(server);
-                        target = "phantasy";
-                    }
-                }
-                if (port.peek() !== target) {
-                    port.clear();
-                    port.write(target);
-                }
+                ns.nuke(target);
                 await ns.sleep(100);
                 ns.scp(files, server, "home");
-                ns.exec("autohack.js", server, 5, target);
-                ns.exec("weaken.js", server, 5, target);
+                ns.exec("autohack.js", server, 5);
+                ns.exec("weaken.js", server, 5);
             }
         }
     }
-    ns.exec("autohack.js", "home", 5, target);
+    ns.exec("autohack.js", "home", 5);
     await ns.sleep(100);
-    ns.exec("weaken.js", "home", 5, target);
-
+    ns.exec("weaken.js", "home", 5);
 }
 export function serverList(ns) {
     let servers = ["home"];
