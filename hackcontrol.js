@@ -13,13 +13,11 @@ export async function main(ns) {
         }
         if (ns.getHackingLevel() >= 10 && ns.getHackingLevel() <= 250) {
             if (target != "joesguns" && ns.getServerNumPortsRequired("joesguns") <= numCracksAvailable) {
-                ns.killall(server);
                 target = "joesguns";
             }
         }
         if (ns.getHackingLevel() >= 250) {
             if (target != "phantasy" && ns.getServerNumPortsRequired("phantasy") <= numCracksAvailable) {
-                ns.killall(server);
                 target = "phantasy";
             }
         }
